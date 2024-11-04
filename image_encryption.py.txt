@@ -1,0 +1,32 @@
+from PIL import Image
+import numpy as np
+
+class ImageEncryptor:
+def __init__(self, key=50):
+self.key = key
+
+def encrypt(self, image_path, output_path):
+img = Image.open(image_path)
+img_array = np.array(img, dtype=np.uint8)
+encrypted_array = (img_array.astype(int) + self.key) % 256
+encrypted_img = Image.fromarray(encrypted_array.astype(np.uint8))
+encrypted_img.save(output_path)
+print(f"Image encrypted and saved as {output_path}")
+
+def decrypt(self, encrypted_image_path, output_path):
+img = Image.open(encrypted_image_path)
+img_array = np.array(img, dtype=np.uint8)
+decrypted_array = (img_array.astype(int) - self.key) % 256
+decrypted_img = Image.fromarray(decrypted_array.astype(np.uint8))
+decrypted_img.save(output_path)
+print(f"Image decrypted and saved as {output_path}")
+
+if __name__ == "__main__":
+key = int(input("Enter an encryption key (integer): "))
+encryptor = ImageEncryptor(key)
+image_path = input("Enter the path of the image to encrypt: ")
+encrypted_image_path = input("Enter the path to save the encrypted image: ")
+encryptor.encrypt(image_path, encrypted_image_path)
+encrypted_image_path_for_decrypt = input("Enter the path of the encrypted image to decrypt: ")
+decrypted_image_path = input("Enter the path to save the decrypted image: ")
+encryptor.decrypt(encrypted_image_path_for_decrypt, decrypted_image_path)
